@@ -24,7 +24,9 @@ public class Main {
             }
         };
 
-        final ExecutorService executorService = Executors.newFixedThreadPool(4, threadFactory);
+        int numberOfCores = Runtime.getRuntime().availableProcessors();
+
+        final ExecutorService executorService = Executors.newFixedThreadPool(numberOfCores);
 
         Thread thread1 = new Thread(new MyRunnable());
         thread1.start();
