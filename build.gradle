@@ -14,10 +14,6 @@ dependencies {
 }
 
 
-sourceSets {
-    println main.output.classesDir
-}
-
 
 task generateBytecode {
     dependsOn compileJava
@@ -32,10 +28,11 @@ private void readClassFiles() {
     File srcDir = sourceSets.main.output.classesDir
 
     if (srcDir != null) {
-
+        // iterate through all files in the build/classes directory
         srcDir.eachFileRecurse(FileType.FILES) { file ->
             boolean b = checkIfIsClassFile(file)
             if (b) {
+                // add the file to the list if it is an class file
                 list << file
             }
         }
@@ -56,10 +53,10 @@ private boolean checkIfIsClassFile(File file) {
 
 def generateByteCodeFiles(File file) {
 
-// javap -v -p -s -sysinfo -constants Subclass\$InnerClass.class
-
+    //execute command and get the command line output as a String
     def stdout = new ByteArrayOutputStream()
     exec {
+        // javap -v -p -s -sysinfo -constants Subclass\$InnerClass.class
         commandLine "javap", "-private", "-v", "-s", file;
         standardOutput = stdout
     }
@@ -70,17 +67,21 @@ def generateByteCodeFiles(File file) {
 
 def createFile(String result, File classFile) {
     String fname = classFile.name;
+
+    // remove file name extension
     int pos = fname.lastIndexOf(".");
     if (pos > 0) {
         fname = fname.substring(0, pos);
     }
 
+    // create txt files to save the result
     fname = fname + ".txt"
     File textFile = new File(project.getBuildDir().toString() + "/bytecode/" + fname);
     textFile.getParentFile().mkdirs();
     textFile.createNewFile();
     println textFile
 
+    // write the output String into the file
     FileWriter fileWriter = new FileWriter(textFile);
     fileWriter.write(result);
     fileWriter.flush();
