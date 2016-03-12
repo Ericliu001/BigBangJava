@@ -1,4 +1,5 @@
 apply plugin: 'java'
+
 import groovy.io.FileType
 
 repositories {
@@ -28,6 +29,7 @@ task generateBytecode {
 
     println 'starts generating bytecode files ... '
     list.each {
+//        println project.getBuildDir()
         generateByteCodeFiles(it)
     }
 }
@@ -42,10 +44,28 @@ private boolean checkIfIsClassFile(File file) {
 def generateByteCodeFiles(File file) {
 
 // javap -v -p -s -sysinfo -constants Subclass\$InnerClass.class
-    exec {
+   def result = exec {
         executable 'javap'
         args "-private", "-v", "-s", file;
     }
+
+    def os =new ByteArrayOutputStream().withStream {result}
+    String resultString = os.toString();
+    createFile(resultString, file);
+}
+
+def createFile(String result, File classFile) {
+    String fname = classFile.name;
+    int pos = fname.lastIndexOf(".");
+    if (pos > 0) {
+        fname = fname.substring(0, pos);
+    }
+
+    fname = fname + ".txt"
+    File textFile = new File(project.getBuildDir().toString() + "/bytecode/" + fname);
+    textFile.getParentFile().mkdirs();
+    textFile.createNewFile();
+    println textFile
 }
 
 
