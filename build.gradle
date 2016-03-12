@@ -1,5 +1,4 @@
 apply plugin: 'java'
-
 import groovy.io.FileType
 
 repositories {
@@ -15,22 +14,36 @@ dependencies {
 }
 
 
+sourceSets {
+    println main.output.classesDir
+}
 
-def list = []
-File srcDir = sourceSets.main.output.classesDir
+
 task generateBytecode {
-
-    srcDir.eachFileRecurse(FileType.FILES) { file ->
-        boolean b = checkIfIsClassFile(file)
-        if (b) {
-            list << file
-        }
+    dependsOn compileJava
+    doLast {
+        readClassFiles()
     }
+}
 
-    println 'starts generating bytecode files ... '
-    list.each {
-//        println project.getBuildDir()
-        generateByteCodeFiles(it)
+
+private void readClassFiles() {
+    def list = []
+    File srcDir = sourceSets.main.output.classesDir
+
+    if (srcDir != null) {
+
+        srcDir.eachFileRecurse(FileType.FILES) { file ->
+            boolean b = checkIfIsClassFile(file)
+            if (b) {
+                list << file
+            }
+        }
+
+        println 'starts generating bytecode files ... '
+        list.each {
+            generateByteCodeFiles(it)
+        }
     }
 }
 
@@ -44,15 +57,16 @@ private boolean checkIfIsClassFile(File file) {
 def generateByteCodeFiles(File file) {
 
 // javap -v -p -s -sysinfo -constants Subclass\$InnerClass.class
-   def result = exec {
-        executable 'javap'
-        args "-private", "-v", "-s", file;
-    }
 
-    def os =new ByteArrayOutputStream().withStream {result}
-    String resultString = os.toString();
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine "javap", "-private", "-v", "-s", file;
+        standardOutput = stdout
+    }
+    String resultString = stdout.toString();
     createFile(resultString, file);
 }
+
 
 def createFile(String result, File classFile) {
     String fname = classFile.name;
@@ -66,6 +80,12 @@ def createFile(String result, File classFile) {
     textFile.getParentFile().mkdirs();
     textFile.createNewFile();
     println textFile
+
+    FileWriter fileWriter = new FileWriter(textFile);
+    fileWriter.write(result);
+    fileWriter.flush();
+    fileWriter.close();
+
 }
 
 
