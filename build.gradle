@@ -15,15 +15,37 @@ dependencies {
 
 
 
+def list = []
 File srcDir = sourceSets.main.output.classesDir
 task generateBytecode {
 
-    def list = []
-
     srcDir.eachFileRecurse(FileType.FILES) { file ->
-        list << file
+        boolean b = checkIfIsClassFile(file)
+        if (b) {
+            list << file
+        }
     }
+
+    println 'starts generating bytecode files ... '
     list.each {
-        println it
+        generateByteCodeFiles(it)
     }
 }
+
+private boolean checkIfIsClassFile(File file) {
+    String regex = ".*\\.class"
+    String filename = file.getName()
+    boolean b = filename.matches(regex);
+    b
+}
+
+def generateByteCodeFiles(File file) {
+
+// javap -v -p -s -sysinfo -constants Subclass\$InnerClass.class
+    exec {
+        executable 'javap'
+        args "-private", "-v", "-s", file;
+    }
+}
+
+
