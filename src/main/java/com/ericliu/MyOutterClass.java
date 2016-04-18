@@ -12,7 +12,7 @@ public class MyOutterClass {
 
 
 
-    private class MyInnerClass{
+    public class MyInnerClass{
 
 
         void sayHello(){
