@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class LockAndCondition {
 
     private static final int CAPACITY = 15;
-    private int index;
+    private int count;
 
     private ReentrantLock mLock;
 
@@ -30,13 +30,13 @@ public class LockAndCondition {
         mLock.lockInterruptibly();
 
         try {
-            while (index == 0) {
+            while (count == 0) {
                 notEmpty.await();
             }
 
-            System.out.println("Take " + index);
-            int data = mArray[index - 1];
-            index--;
+            System.out.println("Take " + count);
+            int data = mArray[count - 1];
+            count--;
             notFull.signal();
             return data;
         } finally {
@@ -48,12 +48,12 @@ public class LockAndCondition {
         mLock.lockInterruptibly();
 
         try {
-            while (index == CAPACITY) {
+            while (count == CAPACITY) {
                 notFull.await();
             }
-            System.out.println("Put " + index);
-            mArray[index] = data;
-            index++;
+            System.out.println("Put " + count);
+            mArray[count] = data;
+            count++;
             notEmpty.signal();
         } finally {
             mLock.unlock();
@@ -89,7 +89,7 @@ public class LockAndCondition {
                 for (int i = 0; i < 15; i++) {
                     try {
                         lockAndCondition.take();
-                        Thread.sleep(660);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
