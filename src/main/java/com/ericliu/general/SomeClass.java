@@ -1,4 +1,4 @@
-package com.ericliu;
+package com.ericliu.general;
 
 /**
  * Created by ericliu on 12/03/2016.

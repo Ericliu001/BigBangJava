@@ -1,4 +1,4 @@
-import com.ericliu.MyOutterClass;
+import com.ericliu.general.MyOutterClass;
 
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ public class InnerClassTest {
 
 
 
-        Class<?> innerClass = Class.forName("com.ericliu.MyOutterClass$MyInnerClass");
+        Class<?> innerClass = Class.forName("com.ericliu.general.MyOutterClass$MyInnerClass");
         Constructor<?> constructor = innerClass.getDeclaredConstructor(MyOutterClass.class);
         constructor.setAccessible(true);
 

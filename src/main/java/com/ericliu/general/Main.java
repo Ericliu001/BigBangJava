@@ -1,4 +1,4 @@
-package com.ericliu;
+package com.ericliu.general;
 
 import com.ericliu.threading.MyRunnable;
 

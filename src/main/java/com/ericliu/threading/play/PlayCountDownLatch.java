@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch;
 public final class PlayCountDownLatch {
 
     private static final int NUM_PARALLEL_TASKS = 4;
-    private CountDownLatch taskStartLatch = new CountDownLatch(1);
+    private CountDownLatch taskStartLatch = new CountDownLatch(4);
     private CountDownLatch taskDoneLatch = new CountDownLatch(NUM_PARALLEL_TASKS);
 
 
