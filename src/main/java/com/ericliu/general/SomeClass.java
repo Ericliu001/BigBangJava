@@ -7,6 +7,11 @@ public class SomeClass {
 
     private String mName;
 
+
+    public static SomeClass newInstance(){
+        return new SomeClass("haha");
+    }
+
     public SomeClass(String name) {
         mName = name;
     }
