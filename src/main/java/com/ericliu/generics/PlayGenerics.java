@@ -35,7 +35,7 @@ public class PlayGenerics {
     }
 
 
-    private void mergeWildcard(Set<?> s1, Set<?> s2) {
+    private final void mergeWildcard(Set<?> s1, Set<?> s2) {
         /**
          *   compile error, you can't put any element into a wildcard Collection
          */

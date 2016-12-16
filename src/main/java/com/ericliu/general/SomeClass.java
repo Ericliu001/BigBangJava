@@ -5,6 +5,12 @@ package com.ericliu.general;
  */
 public class SomeClass {
 
+    private String mName;
+
+    public SomeClass(String name) {
+        mName = name;
+    }
+
     void doSomeStuff(){
         MyOutterClass outterClass = new MyOutterClass();
         MyOutterClass.MyInnerClass innerClass = outterClass.new MyInnerClass();

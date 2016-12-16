@@ -16,6 +16,7 @@ dependencies {
 
 
 task generateBytecode {
+    dependsOn clean
     dependsOn compileJava
     doLast {
         readClassFiles()
