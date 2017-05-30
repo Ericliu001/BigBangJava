@@ -1,25 +1,23 @@
 package com.ericliu.concurrent;
 
-import com.ericliu.concurrent.ConcurrentLinkedList.Node;
+import com.ericliu.concurrent.ConcurrentLinkedListQueue.Node;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by ericliu on 29/5/17.
  */
-public class ConcurrentLinkedListTest {
+public class ConcurrentLinkedListQueueTest {
 
-    private ConcurrentLinkedList list;
+    private ConcurrentLinkedListQueue list;
 
 
     @Before
     public void setUp() throws Exception {
-        list = new ConcurrentLinkedList();
+        list = new ConcurrentLinkedListQueue();
     }
 
     @Test
