@@ -29,13 +29,13 @@ public class ConcurrentLinkedListQueueTest {
             new Thread(){
                 @Override
                 public void run() {
+                    list.enqueue(new Node(element));
                     Random random = new Random();
                     try {
                         Thread.sleep(random.nextInt(5000));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    list.enqueue(new Node(element));
                     latch.countDown();
                 }
             }.start();

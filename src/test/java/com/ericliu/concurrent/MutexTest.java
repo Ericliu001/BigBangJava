@@ -2,6 +2,7 @@ package com.ericliu.concurrent;
 
 import org.junit.Test;
 
+import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -13,16 +14,10 @@ public class MutexTest {
     private int num;
     private int num2;
 
-    private void printNumberSynced() {
-        mutex.lock();
+    private void printNumber() {
         System.out.print((num++) + ", ");
-
-        mutex.unlock();
     }
 
-    private void printNumberUnSynced() {
-        System.out.print((num2++) + ", ");
-    }
 
     @Test
     public void test1() throws Exception {
@@ -31,9 +26,19 @@ public class MutexTest {
 
         for (int i = 0; i < 10; i++) {
             new Thread() {
+
                 @Override
                 public void run() {
-                    printNumberSynced();
+                    mutex.lock();
+                    printNumber();
+
+                    try {
+                        Random random = new Random();
+                        Thread.sleep(random.nextInt(500));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    mutex.unlock();
                     latch.countDown();
                 }
             }.start();
@@ -50,7 +55,13 @@ public class MutexTest {
             new Thread() {
                 @Override
                 public void run() {
-                    printNumberUnSynced();
+                    printNumber();
+                    try {
+                        Random random = new Random();
+                        Thread.sleep(random.nextInt(500));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     latch.countDown();
                 }
             }.start();
